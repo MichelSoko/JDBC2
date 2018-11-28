@@ -139,20 +139,20 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 
 			while (resultSet.next()) {		
 				// Construction d'une ville
-				int id_city = resultSet.getInt("c.id_city");
-				String name = resultSet.getString("c.name");
-				String mayor = resultSet.getString("c.mayor");
-				int inhabitants = resultSet.getInt("c.inhabitants");
-				String postalcode = resultSet.getString("c.postalcode");			
+				int id_city = resultSet.getInt("id_city");
+				String name = resultSet.getString("name");
+				String mayor = resultSet.getString("mayor");
+				int inhabitants = resultSet.getInt("inhabitants");
+				String postalcode = resultSet.getString("postalcode");			
 				CityBO cityBO = new CityBO(name, mayor, inhabitants, postalcode);
 				cityBO.setId_city(id_city);
 				
 				// Construction d'une personne
-				int id_person = resultSet.getInt("p.id_person");
-				String firstname = resultSet.getString("p.firstname");
-				String lastname = resultSet.getString("p.lastname");
-				String emails = resultSet.getString("p.emails");
-				String phone = resultSet.getString("p.phone");
+				int id_person = resultSet.getInt("id_person");
+				String firstname = resultSet.getString("firstname");
+				String lastname = resultSet.getString("lastname");
+				String emails = resultSet.getString("emails");
+				String phone = resultSet.getString("phone");
 				PersonBO personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
 				personBO.setId_person(id_person);
 				
@@ -188,19 +188,19 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 
 			if (resultSet.next()) {	
 				// Construction d'une ville
-				int id_city = resultSet.getInt("c.id_city");
-				String name = resultSet.getString("c.name");
-				String mayor = resultSet.getString("c.mayor");
-				int inhabitants = resultSet.getInt("c.inhabitants");
-				String postalcode = resultSet.getString("c.postalcode");	
+				int id_city = resultSet.getInt("id_city");
+				String name = resultSet.getString("name");
+				String mayor = resultSet.getString("mayor");
+				int inhabitants = resultSet.getInt("inhabitants");
+				String postalcode = resultSet.getString("postalcode");	
 				CityBO cityBO = new CityBO(name, mayor, inhabitants, postalcode);
 				cityBO.setId_city(id_city);
 				
 				// Construction d'une personne
-				String firstname = resultSet.getString("p.firstname");
-				String lastname = resultSet.getString("p.lastname");
-				String emails = resultSet.getString("p.emails");
-				String phone = resultSet.getString("p.phone");
+				String firstname = resultSet.getString("firstname");
+				String lastname = resultSet.getString("lastname");
+				String emails = resultSet.getString("emails");
+				String phone = resultSet.getString("phone");
 				personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
 				personBO.setId_person(id_person);		
 			}
@@ -231,19 +231,19 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 
 			if (resultSet.next()) {	
 				// Construction d'une ville
-				int id_city = resultSet.getInt("c.id_city");
-				String name = resultSet.getString("c.name");
-				String mayor = resultSet.getString("c.mayor");
-				int inhabitants = resultSet.getInt("c.inhabitants");
-				String postalcode = resultSet.getString("c.postalcode");	
+				int id_city = resultSet.getInt("id_city");
+				String name = resultSet.getString("name");
+				String mayor = resultSet.getString("mayor");
+				int inhabitants = resultSet.getInt("inhabitants");
+				String postalcode = resultSet.getString("postalcode");	
 				CityBO cityBO = new CityBO(name, mayor, inhabitants, postalcode);
 				cityBO.setId_city(id_city);
 				
 				// Construction d'une personne
-				int id_person = resultSet.getInt("p.id_person");
-				String firstname = resultSet.getString("p.firstname");
-				String lastname = resultSet.getString("p.lastname");
-				String phone = resultSet.getString("p.phone");
+				int id_person = resultSet.getInt("id_person");
+				String firstname = resultSet.getString("firstname");
+				String lastname = resultSet.getString("lastname");
+				String phone = resultSet.getString("phone");
 				personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
 				personBO.setId_person(id_person);		
 			}
@@ -253,6 +253,43 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 			return personBO;
 		} catch (SQLException e) {
 			throw new PersonDAOException(e);
+		}
+	}
+
+	// Obtenir une liste de personne pour une ville
+	public List<PersonBO> getByCity(CityBO cityBO) throws PersonDAOException {
+		try {
+			List<PersonBO> listPersonBO = new ArrayList<PersonBO>();
+			String sql = "SELECT p.id_person, p.firstname, p.lastname, p.emails, p.phone "
+					+ "FROM person p "
+					+ "INNER JOIN city c ON p.id_city = c.id_city "
+					+ "WHERE c.name = ?";
+			connect();
+
+			PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+			statement.setString(1, cityBO.getName());
+			ResultSet resultSet = statement.executeQuery();	
+
+			while (resultSet.next()) {			
+				// Construction d'une personne
+				int id_person = resultSet.getInt("id_person");
+				String firstname = resultSet.getString("firstname");
+				String lastname = resultSet.getString("lastname");
+				String emails = resultSet.getString("emails");
+				String phone = resultSet.getString("phone");
+				PersonBO personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
+				personBO.setId_person(id_person);
+				
+				// Ajout d'une personne à la liste
+				listPersonBO.add(personBO);
+			}
+
+			resultSet.close();
+			statement.close();
+			disconnect();
+			return listPersonBO;
+		} catch (SQLException e) {
+			throw new PersonDAOException(e);		
 		}
 	}
 	
@@ -274,19 +311,19 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 
 			while (resultSet.next()) {
 				// Construction d'une ville
-				int id_city = resultSet.getInt("c.id_city");
-				String name = resultSet.getString("c.name");
-				String mayor = resultSet.getString("c.mayor");
-				int inhabitants = resultSet.getInt("c.inhabitants");
-				String postalcode = resultSet.getString("c.postalcode");		
+				int id_city = resultSet.getInt("id_city");
+				String name = resultSet.getString("name");
+				String mayor = resultSet.getString("mayor");
+				int inhabitants = resultSet.getInt("inhabitants");
+				String postalcode = resultSet.getString("postalcode");		
 				CityBO cityBO = new CityBO(name, mayor, inhabitants, postalcode);
 				cityBO.setId_city(id_city);
 				
 				// Construction d'une personne
-				int id_person = resultSet.getInt("p.id_person");
-				String firstname = resultSet.getString("p.firstname");
-				String emails = resultSet.getString("p.emails");
-				String phone = resultSet.getString("p.phone");
+				int id_person = resultSet.getInt("id_person");
+				String firstname = resultSet.getString("firstname");
+				String emails = resultSet.getString("emails");
+				String phone = resultSet.getString("phone");
 				PersonBO personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
 				personBO.setId_person(id_person);
 				
@@ -310,6 +347,6 @@ public class PersonDAO implements InterfaceDAO<PersonBO> {
 		if (this.getById(personBO.getId_person()) != null)
 			result = true;
 		return result;
-	}
+	}	
 
 }

@@ -9,21 +9,8 @@ import bo.*;
 public class MainApp {
 
 	public static void main(String[] args) {
-		try {
-			
-			/*
-			 * 
-			 * 
-			 * 
-			 * REGLER problème sur PersonDAO.getAll()
-			 * 
-			 * 
-			 * REGLER problème pour générer entre 6 et 7 avec 50% de chance pour chaque
-			 * 
-			 * 
-			 */
-			
-			//populate();
+		try {	
+			populate();
 			display();
 		} catch (CityDAOException e) {
 			// TODO Auto-generated catch block
@@ -56,7 +43,7 @@ public class MainApp {
 				String firstname = name + "prénom" + j;
 				String lastname = name + "nom" + j;
 				String emails = "prénom" + j + ".nom" + j + "@" + name + ".fr";
-				String phone = "0" + (int) (6 + Math.random()) + (int) (10000000 + Math.random() * 90000000);
+				String phone = "0" + (int) (6 + Math.random() * 1.99) + (int) (10000000 + Math.random() * 90000000);
 				personBO = new PersonBO(cityBO, firstname, lastname, emails, phone);
 
 				personDAO.add(personBO); // Insertion en BDD
@@ -73,10 +60,10 @@ public class MainApp {
 			System.out.println("Aucune ville dans la base de données !");
 		} else {
 			for (CityBO cityBO : listCityBO) {
-				cityBO.toString();
-				List<PersonBO> listPersonBO = personDAO.getAll();
+				System.out.println(cityBO.toString());
+				List<PersonBO> listPersonBO = personDAO.getByCity(cityBO);
 				for (PersonBO personBO : listPersonBO) {
-					personBO.toString();
+					System.out.println(personBO.toString());
 				}
 			}
 		}

@@ -11,7 +11,7 @@ public class CityDAOException extends Exception {
 
 	@Override
 	public String toString() {
-		return new String(" Erreur SQL : " + cause.getMessage());
+		return new String("CityDAO : " + cause.getMessage());
 	}
 	
 }

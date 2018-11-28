@@ -11,7 +11,7 @@ public class PersonDAOException extends Exception {
 
 	@Override
 	public String toString() {
-		return new String(" Erreur SQL : " + cause.getMessage());
+		return new String("PersonDAO : " + cause.getMessage());
 	}
 
 }
